@@ -1,0 +1,16 @@
+{
+ $schema: "https://swc-project.github.io/deem",
+  "jsc": {
+    "experimental": {
+      "plugins": [
+        [
+          "@swc/plugin-styled-components",
+          {
+            "displayName": true,
+            "ssr": true,
+          }
+        ]
+      ]
+    }
+  }
+}

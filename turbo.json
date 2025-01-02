@@ -5,5 +5,5 @@
             "outputs": ["public/build/**"]
         },
         "lint": {}
-    }
+    },
 }
