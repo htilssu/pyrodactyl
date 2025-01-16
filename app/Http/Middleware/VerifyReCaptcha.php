@@ -2,15 +2,18 @@
 
 namespace Pterodactyl\Http\Middleware;
 
+use Closure;
 use GuzzleHttp\Client;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Pterodactyl\Events\Auth\FailedCaptcha;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Http\Request;
+use Pterodactyl\Events\Auth\FailedCaptcha;
+use stdClass;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class VerifyReCaptcha
+readonly class VerifyReCaptcha
 {
     /**
      * VerifyReCaptcha constructor.
@@ -21,8 +24,9 @@ class VerifyReCaptcha
 
     /**
      * Handle an incoming request.
+     * @throws GuzzleException
      */
-    public function handle(Request $request, \Closure $next): mixed
+    public function handle(Request $request, Closure $next): mixed
     {
         if (!$this->config->get('recaptcha.enabled')) {
             return $next($request);
@@ -53,13 +57,13 @@ class VerifyReCaptcha
             )
         );
 
-        throw new HttpException(Response::HTTP_BAD_REQUEST, 'Failed to validate reCAPTCHA data.');
+        throw new HttpException(ResponseAlias::HTTP_BAD_REQUEST, 'Failed to validate reCAPTCHA data.');
     }
 
     /**
      * Determine if the response from the recaptcha servers was valid.
      */
-    private function isResponseVerified(\stdClass $result, Request $request): bool
+    private function isResponseVerified(stdClass $result, Request $request): bool
     {
         if (!$this->config->get('recaptcha.verify_domain')) {
             return false;

@@ -47,9 +47,7 @@ class LoginController extends AbstractLoginController
 
         try {
             $username = $request->input('user');
-
-            /** @var User $user */
-            $user = User::query()->where($this->getField($username), $username)->firstOrFail();
+            $user = User::query()->where('username', $username)->orWhere('email', $username)->firstOrFail();
         } catch (ModelNotFoundException) {
             $this->sendFailedLoginResponse($request);
         }

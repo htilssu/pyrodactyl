@@ -14,7 +14,7 @@ import login from '@/api/auth/login';
 
 import useFlash from '@/plugins/useFlash';
 
-import Logo from '../elements/PyroLogo';
+import Logo from '../elements/HBLogo';
 
 interface Values {
     username: string;
@@ -54,7 +54,7 @@ function LoginContainer() {
             .then((response) => {
                 if (response.complete) {
                     // @ts-expect-error this is valid
-                    window.location = response.intended || '/';
+                    window.location = response.intended ?? '/';
                     return;
                 }
 
@@ -68,7 +68,7 @@ function LoginContainer() {
                 if (ref.current) {
                     setTimeout(() => {
                         if (ref.current) {
-                            ref.current.reset();
+                            ref.current.reset().then();
                         }
                     }, 500);
                 }
@@ -83,34 +83,21 @@ function LoginContainer() {
             onSubmit={onSubmit}
             initialValues={{ username: '', password: '' }}
             validationSchema={object().shape({
-                username: string().required('A username or email must be provided.'),
-                password: string().required('Please enter your account password.'),
+                username: string().required('Tên đăng nhập hoặc Email không được để trống.'),
+                password: string().required('Mật khẩu không được để trống.'),
             })}
         >
             {({ isSubmitting, setSubmitting, submitForm }) => (
                 <LoginFormContainer className={`w-full flex`}>
-                    <div className='flex h-12 mb-4 items-center w-full'>
-                        {/* temp src */}
-                        {/* <img
-                            className='w-full max-w-full h-full'
-                            loading='lazy'
-                            decoding='async'
-                            alt=''
-                            aria-hidden
-                            style={{
-                                color: 'transparent',
-                            }}
-                            src='https://i.imgur.com/Hbum4fc.png'
-                        /> */}
-                        {/* <NavLink to={'/'} className='flex shrink-0 h-full w-fit'> */}
+                    <div className='flex h-20 mb-4 items-center w-full'>
                         <Logo />
                     </div>
                     <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                    <h2 className='text-xl font-extrabold mb-2'>Login</h2>
+                    <h2 className='text-xl font-extrabold mb-2'>Đăng nhập</h2>
                     <Field
                         id='usernameOrEmail'
                         type={'text'}
-                        label={'Username or Email'}
+                        label={'Tên đăng nhập hoặc Email'}
                         name={'username'}
                         disabled={isSubmitting}
                     />
@@ -118,7 +105,7 @@ function LoginContainer() {
                         <Field
                             id='password'
                             type={'password'}
-                            label={'Password'}
+                            label={'Mật khẩu'}
                             name={'password'}
                             disabled={isSubmitting}
                         />
@@ -126,7 +113,7 @@ function LoginContainer() {
                             to={'/auth/password'}
                             className={`text-xs text-zinc-500 tracking-wide no-underline hover:text-zinc-600 absolute top-1 right-0`}
                         >
-                            Forgot Password?
+                            Quên mật khẩu?
                         </Link>
                     </div>
                     <div className={`mt-6`}>
@@ -137,7 +124,7 @@ function LoginContainer() {
                             isLoading={isSubmitting}
                             disabled={isSubmitting}
                         >
-                            Login
+                            Đăng nhập
                         </Button>
                     </div>
                     {recaptchaEnabled && (

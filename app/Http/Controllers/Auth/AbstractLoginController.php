@@ -3,6 +3,7 @@
 namespace Pterodactyl\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
+use Illuminate\Log\Logger;
 use Pterodactyl\Models\User;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Http\JsonResponse;

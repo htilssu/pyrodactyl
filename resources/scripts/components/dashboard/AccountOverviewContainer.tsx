@@ -9,12 +9,12 @@ import PageContentBlock from '@/components/elements/PageContentBlock';
 
 import Code from '../elements/Code';
 
-export default () => {
+export default function AccountOverviewContainer() {
     const { state } = useLocation();
 
     return (
-        <PageContentBlock title={'Your Settings'}>
-            <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem] mb-8'>Your Settings</h1>
+        <PageContentBlock title={'Cài đặt'}>
+            <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem] mb-8'>Cài đặt</h1>
             {state?.twoFactorRedirect && (
                 <MessageBox title={'2-Factor Required'} type={'error'}>
                     Your account must have two-factor authentication enabled in order to continue.
@@ -22,12 +22,12 @@ export default () => {
             )}
 
             <div className='flex flex-col w-full h-full gap-4'>
-                <h2 className='mt-8 font-extrabold text-2xl'>Account Information</h2>
-                <ContentBox title={'Email Address'} showFlashes={'account:email'}>
+                <h2 className='mt-8 font-extrabold text-2xl'>Thông tin tài khoản</h2>
+                <ContentBox title={'Địa chỉ Email'} showFlashes={'account:email'}>
                     <UpdateEmailAddressForm />
                 </ContentBox>
-                <h2 className='mt-8 font-extrabold text-2xl'>Password and Authentication</h2>
-                <ContentBox title={'Account Password'} showFlashes={'account:password'}>
+                <h2 className='mt-8 font-extrabold text-2xl'>Mật khẩu và bảo mật</h2>
+                <ContentBox title={'Mật khẩu'} showFlashes={'account:password'}>
                     <UpdatePasswordForm />
                 </ContentBox>
                 <ContentBox title={'Multi-Factor Authentication'}>
@@ -35,9 +35,6 @@ export default () => {
                 </ContentBox>
                 <h2 className='mt-8 font-extrabold text-2xl'>App</h2>
                 <ContentBox title={'Panel Version'}>
-                    <p className='text-sm mb-4'>
-                        This is useful to provide Pyro staff if you run into an unexpected issue.
-                    </p>
                     <div className='flex flex-col gap-4'>
                         <Code>{import.meta.env.VITE_PYRODACTYL_VERSION}</Code>
                         <Code>
@@ -49,4 +46,4 @@ export default () => {
             </div>
         </PageContentBlock>
     );
-};
+}

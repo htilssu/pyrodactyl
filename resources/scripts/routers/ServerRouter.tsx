@@ -16,7 +16,7 @@ import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import MainSidebar from '@/components/elements/MainSidebar';
 import MainWrapper from '@/components/elements/MainWrapper';
 import PermissionRoute from '@/components/elements/PermissionRoute';
-import Logo from '@/components/elements/PyroLogo';
+import Logo from '@/components/elements/HBLogo';
 import { NotFound, ServerError } from '@/components/elements/ScreenBlock';
 import CommandMenu from '@/components/elements/commandk/CmdK';
 import HugeIconsClock from '@/components/elements/hugeicons/Clock';

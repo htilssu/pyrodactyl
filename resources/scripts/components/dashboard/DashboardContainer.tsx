@@ -23,9 +23,9 @@ import { usePersistedState } from '@/plugins/usePersistedState';
 
 import { MainPageHeader } from '../elements/MainPageHeader';
 
-export default () => {
+export default function DashboardContainer() {
     const { search } = useLocation();
-    const defaultPage = Number(new URLSearchParams(search).get('page') || '1');
+    const defaultPage = Number(new URLSearchParams(search).get('page') ?? '1');
 
     const [page, setPage] = useState(!isNaN(defaultPage) && defaultPage > 0 ? defaultPage : 1);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
@@ -71,7 +71,7 @@ export default () => {
                 }}
                 className='w-full'
             >
-                <MainPageHeader title={showOnlyAdmin ? 'Other Servers' : 'Your Servers'}>
+                <MainPageHeader title={showOnlyAdmin ? 'Other Servers' : 'Server của bạn'}>
                     <div className='flex gap-4'>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -88,7 +88,7 @@ export default () => {
                                             fill='white'
                                         />
                                     </svg>
-                                    <div>Filter</div>
+                                    <div>Bộ lọc</div>
                                     <svg
                                         xmlns='http://www.w3.org/2000/svg'
                                         width='13'
@@ -176,7 +176,7 @@ export default () => {
                                         <p className={`text-center text-sm text-zinc-400`}>
                                             {showOnlyAdmin
                                                 ? 'There are no other servers to display.'
-                                                : 'There are no servers associated with your account.'}
+                                                : 'Bạn không có server nào.'}
                                         </p>
                                     )
                                 }
@@ -208,7 +208,7 @@ export default () => {
                                             <p className={`text-center text-sm text-zinc-400`}>
                                                 {showOnlyAdmin
                                                     ? 'There are no other servers to display.'
-                                                    : 'There are no servers associated with your account.'}
+                                                    : 'Bạn không có server nào.'}
                                             </p>
                                         )
                                     }
@@ -220,4 +220,4 @@ export default () => {
             </Tabs>
         </PageContentBlock>
     );
-};
+}

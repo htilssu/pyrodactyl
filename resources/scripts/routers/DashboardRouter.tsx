@@ -12,9 +12,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenu';
+import Logo from '@/components/elements/HBLogo';
 import MainSidebar from '@/components/elements/MainSidebar';
 import MainWrapper from '@/components/elements/MainWrapper';
-import Logo from '@/components/elements/PyroLogo';
 import { NotFound } from '@/components/elements/ScreenBlock';
 import HugeIconsApi from '@/components/elements/hugeicons/Api';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
@@ -23,14 +23,14 @@ import HugeIconsSsh from '@/components/elements/hugeicons/Ssh';
 
 import http from '@/api/http';
 
-export default () => {
+export default function DashboardRouter() {
     const location = useLocation();
     const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
 
-    const [isSidebarVisible, setSidebarVisible] = useState(false);
+    const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
     const toggleSidebar = () => {
-        setSidebarVisible(!isSidebarVisible); // Toggle sidebar visibility
+        setIsSidebarVisible(!isSidebarVisible); // Toggle sidebar visibility
     };
 
     const onTriggerLogout = () => {
@@ -125,9 +125,8 @@ export default () => {
                     }}
                 />
                 <div className='relative flex flex-row items-center justify-between h-8'>
-                    <NavLink to={'/'} className='flex shrink-0 h-full w-fit'>
+                    <NavLink to={'/'} className='flex shrink-0 h-full w-full'>
                         <Logo />
-                        {/* <h1 className='text-[35px] font-semibold leading-[98%] tracking-[-0.05rem] mb-8'>Panel</h1> */}
                     </NavLink>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -204,4 +203,4 @@ export default () => {
             </Suspense>
         </Fragment>
     );
-};
+}

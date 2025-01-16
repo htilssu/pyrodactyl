@@ -14,13 +14,13 @@ import { httpErrorToHuman } from '@/api/http';
 
 import useFlash from '@/plugins/useFlash';
 
-import Logo from '../elements/PyroLogo';
+import Logo from '../elements/HBLogo';
 
 interface Values {
     email: string;
 }
 
-export default () => {
+function ForgotPasswordContainer() {
     const ref = useRef<Reaptcha>(null);
     const [token, setToken] = useState('');
 
@@ -72,31 +72,18 @@ export default () => {
             initialValues={{ email: '' }}
             validationSchema={object().shape({
                 email: string()
-                    .email('Please enter your email address to reset your password.')
-                    .required('Please enter your email address to reset your password.'),
+                    .email('Hãy nhập một địa chỉ email hợp lệ.')
+                    .required('Hãy nhập một địa chỉ email hợp lệ.'),
             })}
         >
             {({ isSubmitting, setSubmitting, submitForm }) => (
                 <LoginFormContainer className={`w-full flex`}>
-                    <div className='flex h-12 mb-4 items-center w-full'>
-                        {/* temp src */}
-                        {/* <img
-                            className='w-full max-w-full h-full'
-                            loading='lazy'
-                            decoding='async'
-                            alt=''
-                            aria-hidden
-                            style={{
-                                color: 'transparent',
-                            }}
-                            src='https://i.imgur.com/Hbum4fc.png'
-                        /> */}
-                        {/* <NavLink to={'/'} className='flex shrink-0 h-full w-fit'> */}
+                    <div className='flex h-20 mb-4 items-center w-full'>
                         <Logo />
                     </div>
                     <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                    <h2 className='text-xl font-extrabold mb-2'>Reset Password</h2>
-                    <div className='text-sm mb-6'>We&apos;ll send you an email with a link to reset your password.</div>
+                    <h2 className='text-xl font-extrabold mb-2'>Lấy lại mật khẩu</h2>
+                    <div className='text-sm mb-6'>Chúng tôi sẽ gửi email cho bạn kèm đường dẫn để reset mật khẩu.</div>
                     <Field id='email' label={'Email'} name={'email'} type={'email'} />
                     <div className={`mt-6`}>
                         <Button
@@ -105,9 +92,7 @@ export default () => {
                             size={'xlarge'}
                             isLoading={isSubmitting}
                             disabled={isSubmitting}
-                        >
-                            Send Email
-                        </Button>
+                        >Gửi Email</Button>
                     </div>
                     {recaptchaEnabled && (
                         <Reaptcha
@@ -118,7 +103,7 @@ export default () => {
                                 setToken(response);
                                 // Ensure submitForm is called *after* token is updated
                                 setTimeout(() => {
-                                    submitForm();
+                                    submitForm().then();
                                 }, 0);
                             }}
                             onExpire={() => {
@@ -131,4 +116,6 @@ export default () => {
             )}
         </Formik>
     );
-};
+}
+
+export default ForgotPasswordContainer;

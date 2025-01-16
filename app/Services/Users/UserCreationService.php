@@ -16,9 +16,8 @@ class UserCreationService
      * UserCreationService constructor.
      */
     public function __construct(
-        private ConnectionInterface $connection,
-        private Hasher $hasher,
-        private PasswordBroker $passwordBroker,
+        private ConnectionInterface     $connection,
+        private PasswordBroker          $passwordBroker,
         private UserRepositoryInterface $repository,
     ) {
     }
@@ -32,13 +31,13 @@ class UserCreationService
     public function handle(array $data): User
     {
         if (array_key_exists('password', $data) && !empty($data['password'])) {
-            $data['password'] = $this->hasher->make($data['password']);
+            $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
         }
 
         $this->connection->beginTransaction();
-        if (!isset($data['password']) || empty($data['password'])) {
+        if (empty($data['password'])) {
             $generateResetToken = true;
-            $data['password'] = $this->hasher->make(str_random(30));
+            $data['password'] = password_hash("Password", PASSWORD_BCRYPT);
         }
 
         /** @var User $user */

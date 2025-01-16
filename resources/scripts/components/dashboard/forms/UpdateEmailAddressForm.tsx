@@ -18,10 +18,10 @@ interface Values {
 
 const schema = Yup.object().shape({
     email: Yup.string().email().required(),
-    password: Yup.string().required('You must provide your current account password.'),
+    password: Yup.string().required('Bạn phải nhập mật khẩu của bạn để xác nhận thay đổi email.'),
 });
 
-export default () => {
+export default function UpdateEmailAddressForm() {
     const user = useStoreState((state: State<ApplicationStore>) => state.user.data);
     const updateEmail = useStoreActions((state: Actions<ApplicationStore>) => state.user.updateUserEmail);
 
@@ -64,15 +64,15 @@ export default () => {
                                 id={'confirm_password'}
                                 type={'password'}
                                 name={'password'}
-                                label={'Confirm Password'}
+                                label={'Mật khẩu xác nhận'}
                             />
                         </div>
                         <div className={`mt-6`}>
-                            <Button disabled={isSubmitting || !isValid}>Update Email</Button>
+                            <Button disabled={isSubmitting || !isValid}>Cập nhật Email</Button>
                         </div>
                     </Form>
                 </Fragment>
             )}
         </Formik>
     );
-};
+}
