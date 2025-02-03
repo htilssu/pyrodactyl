@@ -102,5 +102,8 @@ export default defineConfig({
                 'resources/scripts/routers/ServerRouter.tsx',
             ],
         },
+        hmr: {
+            host: 'localhost',
+        },
     },
 });
