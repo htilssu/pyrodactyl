@@ -2,13 +2,14 @@
 
 namespace Pterodactyl\Services\Users;
 
-use Ramsey\Uuid\Uuid;
-use Pterodactyl\Models\User;
-use Illuminate\Contracts\Hashing\Hasher;
-use Illuminate\Database\ConnectionInterface;
+use Exception;
 use Illuminate\Contracts\Auth\PasswordBroker;
-use Pterodactyl\Notifications\AccountCreated;
+use Illuminate\Database\ConnectionInterface;
 use Pterodactyl\Contracts\Repository\UserRepositoryInterface;
+use Pterodactyl\Exceptions\Model\DataValidationException;
+use Pterodactyl\Models\User;
+use Pterodactyl\Notifications\AccountCreated;
+use Ramsey\Uuid\Uuid;
 
 class UserCreationService
 {
@@ -25,8 +26,8 @@ class UserCreationService
     /**
      * Create a new user on the system.
      *
-     * @throws \Exception
-     * @throws \Pterodactyl\Exceptions\Model\DataValidationException
+     * @throws Exception
+     * @throws DataValidationException
      */
     public function handle(array $data): User
     {

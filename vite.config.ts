@@ -93,6 +93,7 @@ export default defineConfig({
     },
 
     server: {
+        host: 'localhost',
         warmup: {
             clientFiles: [
                 'resources/scripts/index.tsx',

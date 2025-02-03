@@ -144,15 +144,10 @@ class ServerRepository extends EloquentRepository implements ServerRepositoryInt
     public function getByUuid(string $uuid): Server
     {
         try {
-            /** @var Server $model */
-            $model = $this->getBuilder()
-                ->with('nest', 'node')
-                ->where(function (Builder $query) use ($uuid) {
-                    $query->where('uuidShort', $uuid)->orWhere('uuid', $uuid);
-                })
-                ->firstOrFail($this->getColumns());
-
-            return $model;
+            return Server::query()->with('nest', 'node')
+                ->where('uuid', value: $uuid)
+                ->orWhere('uuidShort', value: $uuid)
+                ->firstOrFail();
         } catch (ModelNotFoundException) {
             throw new RecordNotFoundException();
         }

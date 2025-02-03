@@ -2,6 +2,7 @@
 
 namespace Pterodactyl\Http\Controllers\Api\Remote\Servers;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Pterodactyl\Models\Server;
 use Illuminate\Http\JsonResponse;
@@ -12,6 +13,7 @@ use Pterodactyl\Services\Eggs\EggConfigurationService;
 use Pterodactyl\Repositories\Eloquent\ServerRepository;
 use Pterodactyl\Http\Resources\Wings\ServerConfigurationCollection;
 use Pterodactyl\Services\Servers\ServerConfigurationStructureService;
+use Symfony\Component\HttpFoundation\Response;
 
 class ServerDetailsController extends Controller
 {
@@ -19,11 +21,12 @@ class ServerDetailsController extends Controller
      * ServerConfigurationController constructor.
      */
     public function __construct(
-        protected ConnectionInterface $connection,
-        private ServerRepository $repository,
+        protected ConnectionInterface               $connection,
+        private ServerRepository                    $repository,
         private ServerConfigurationStructureService $configurationStructureService,
-        private EggConfigurationService $eggConfigurationService,
-    ) {
+        private EggConfigurationService             $eggConfigurationService,
+    )
+    {
     }
 
     /**
@@ -35,7 +38,6 @@ class ServerDetailsController extends Controller
     public function __invoke(Request $request, string $uuid): JsonResponse
     {
         $server = $this->repository->getByUuid($uuid);
-
         return new JsonResponse([
             'settings' => $this->configurationStructureService->handle($server),
             'process_configuration' => $this->eggConfigurationService->handle($server),
@@ -56,9 +58,27 @@ class ServerDetailsController extends Controller
             ->where('node_id', $node->id)
             // If you don't cast this to a string you'll end up with a stringified per_page returned in
             // the metadata, and then Wings will panic crash as a result.
-            ->paginate((int) $request->input('per_page', 50));
+            ->paginate((int)$request->input('per_page', 50));
 
         return new ServerConfigurationCollection($servers);
+    }
+
+    public function get(Request $request, string $id): JsonResponse
+    {
+        $node = $request->attributes->get('node');
+
+        // Avoid run-away N+1 SQL queries by preloading the relationships that are used
+        // within each of the services called below.
+
+        try {
+            $servers = Server::query()->with('allocations', 'egg', 'mounts', 'variables', 'location')
+                ->where('node_id', $node->id)->where('uuid', $id)->firstOrFail();
+
+        } catch (ModelNotFoundException $exception) {
+            return new JsonResponse([], Response::HTTP_NOT_FOUND);
+        }
+
+        return response()->json($servers);
     }
 
     /**
@@ -81,7 +101,7 @@ class ServerDetailsController extends Controller
         // failed and then update them all to be in a valid state.
         $servers = Server::query()
             ->with([
-                'activity' => fn ($builder) => $builder
+                'activity' => fn($builder) => $builder
                     ->where('activity_logs.event', 'server:backup.restore-started')
                     ->latest('timestamp'),
             ])

@@ -1,0 +1,18 @@
+debug: false
+uuid: e2b83267-6031-47fe-844f-c0c9a2e1e58e
+token_id: NRdYWR0h9NH15VFm
+token: C8eeSHmdHW36YZNhZxYkIEEH08TfuclPq0EZq8LqutxYkicRQNqcHunEExc7RC97
+api:
+  host: 0.0.0.0
+  port: 8080
+  ssl:
+    enabled: false
+    cert: /etc/letsencrypt/live/172.190.0.2/fullchain.pem
+    key: /etc/letsencrypt/live/172.190.0.2/privkey.pem
+  upload_limit: 100
+system:
+  data: /var/lib/pterodactyl/volumes
+  sftp:
+    bind_port: 2022
+allowed_mounts: []
+remote: 'http://host.docker.internal:8000'

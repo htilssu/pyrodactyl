@@ -2,10 +2,8 @@ services:
   pterodactyl-wings:
     image: ghcr.io/pterodactyl/wings:latest
     container_name: pterodactyl-wings
-    restart: unless-stopped
-    network_mode: 'host'
+    restart: on-failure
     environment:
-      - TZ=America/Los_Angeles
       - WINGS_UID=1001
       - WINGS_GID=1001
       - WINGS_USERNAME=pyrodactyl
@@ -16,5 +14,6 @@ services:
       - "./lib:/var/lib/pterodactyl"
       - "./log:/var/log/pterodactyl"
       - "./tmp:/tmp/pterodactyl"
+      - "./:/etc/pterodactyl/"
 
 

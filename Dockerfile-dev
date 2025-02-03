@@ -1,0 +1,27 @@
+FROM --platform=$TARGETOS/$TARGETARCH php:8.3-fpm-alpine
+WORKDIR /app
+COPY composer.json ./
+
+RUN apk add --no-cache --update bash nodejs npm curl ca-certificates dcron curl git supervisor tar unzip nginx libpng-dev libxml2-dev libzip-dev certbot certbot-nginx mysql-client \
+         && docker-php-ext-configure zip \
+         && docker-php-ext-install bcmath gd pdo_mysql zip \
+         && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+
+ENV SHELL=/bin/bash
+SHELL ["/bin/bash", "-c"]
+
+RUN composer install --no-scripts --no-autoloader
+
+
+
+RUN npm i -g pnpm
+
+COPY package.json ./
+RUN pnpm i
+
+COPY . .
+## Verify pnpm version:
+
+EXPOSE 8000 5173
+
+CMD ["pnpm", "run", "dev"]

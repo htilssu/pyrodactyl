@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import MainPage from '@/components/elements/MainPage';
@@ -13,17 +13,15 @@ export interface PageContentBlockProps {
 const PageContentBlock: React.FC<PageContentBlockProps> = ({ title, showFlashKey, className, children }) => {
     useEffect(() => {
         if (title) {
-            document.title = title + ' | Pyrodactyl';
+            document.title = title + ' | HBHost';
         }
     }, [title]);
 
     return (
-        <>
-            <MainPage className={`${className || ''} max-w-[120rem] w-full mx-auto px-2 sm:px-14 py-2 sm:py-14`}>
-                {showFlashKey && <FlashMessageRender byKey={showFlashKey} />}
-                {children}
-            </MainPage>
-        </>
+        <MainPage className={`${className ?? ''} max-w-[120rem] w-full mx-auto px-2 sm:px-14 py-2 sm:py-14`}>
+            {showFlashKey && <FlashMessageRender byKey={showFlashKey} />}
+            {children}
+        </MainPage>
     );
 };
 

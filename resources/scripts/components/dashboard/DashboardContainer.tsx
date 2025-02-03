@@ -42,7 +42,6 @@ export default function DashboardContainer() {
         ['/api/client/servers', showOnlyAdmin && rootAdmin, page],
         () => getServers({ page, type: showOnlyAdmin && rootAdmin ? 'admin' : undefined }),
     );
-
     useEffect(() => {
         if (!servers) return;
         if (servers.pagination.currentPage > 1 && !servers.items.length) {
@@ -63,7 +62,7 @@ export default function DashboardContainer() {
     }, [error]);
 
     return (
-        <PageContentBlock title={'Dashboard'} showFlashKey={'dashboard'}>
+        <PageContentBlock title={'Bảng điều khiển'} showFlashKey={'dashboard'}>
             <Tabs
                 defaultValue={dashboardDisplayOption}
                 onValueChange={(value) => {
@@ -107,7 +106,7 @@ export default function DashboardContainer() {
                                 </button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className='flex flex-col gap-1 z-[99999]' sideOffset={8}>
-                                <div className='text-xs opacity-50 text-center'>More filters coming soon!</div>
+                                <div className='text-xs opacity-50 text-center'>Bộ lọc sẽ sớm được thêm!</div>
                                 {rootAdmin && (
                                     <DropdownMenuItem
                                         onSelect={() => {

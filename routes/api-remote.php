@@ -11,7 +11,7 @@ Route::post('/servers/reset', [Remote\Servers\ServerDetailsController::class, 'r
 Route::post('/activity', Remote\ActivityProcessingController::class);
 
 Route::group(['prefix' => '/servers/{uuid}'], function () {
-    Route::get('/', Remote\Servers\ServerDetailsController::class);
+    Route::get('', Remote\Servers\ServerDetailsController::class);
     Route::get('/install', [Remote\Servers\ServerInstallController::class, 'index']);
     Route::post('/install', [Remote\Servers\ServerInstallController::class, 'store']);
 

@@ -3,6 +3,6 @@ vagrant/
 .swc/
 .turbo/
 nix/
+node_modules
 flake.nix
 flake.lock
-

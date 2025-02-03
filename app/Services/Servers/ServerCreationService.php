@@ -18,6 +18,7 @@ use Pterodactyl\Services\Deployment\FindViableNodesService;
 use Pterodactyl\Repositories\Eloquent\ServerVariableRepository;
 use Pterodactyl\Services\Deployment\AllocationSelectionService;
 use Pterodactyl\Exceptions\Http\Connection\DaemonConnectionException;
+use function _PHPStan_b5fc9ecbb\React\Async\delay;
 
 class ServerCreationService
 {
@@ -26,14 +27,15 @@ class ServerCreationService
      */
     public function __construct(
         private AllocationSelectionService $allocationSelectionService,
-        private ConnectionInterface $connection,
-        private DaemonServerRepository $daemonServerRepository,
-        private FindViableNodesService $findViableNodesService,
-        private ServerRepository $repository,
-        private ServerDeletionService $serverDeletionService,
-        private ServerVariableRepository $serverVariableRepository,
-        private VariableValidatorService $validatorService,
-    ) {
+        private ConnectionInterface        $connection,
+        private DaemonServerRepository     $daemonServerRepository,
+        private FindViableNodesService     $findViableNodesService,
+        private ServerRepository           $repository,
+        private ServerDeletionService      $serverDeletionService,
+        private ServerVariableRepository   $serverVariableRepository,
+        private VariableValidatorService   $validatorService,
+    )
+    {
     }
 
     /**
@@ -92,7 +94,6 @@ class ServerCreationService
 
             return $server;
         }, 5);
-
         try {
             $this->daemonServerRepository->setServer($server)->create(
                 Arr::get($data, 'start_on_completion', false) ?? false

@@ -123,31 +123,33 @@ export default ({ server, className }: { server: Server; className?: string }) =
             <div
                 className={`h-full hidden sm:flex items-center justify-center bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-md w-fit whitespace-nowrap px-4 py-2 text-sm gap-4`}
             >
-                {!stats || isSuspended ? (
-                    isSuspended ? (
-                        <div className={`flex-1 text-center`}>
-                            <span className={`text-red-100 text-xs`}>
-                                {server.status === 'suspended' ? 'Suspended' : 'Connection Error'}
-                            </span>
-                        </div>
-                    ) : server.isTransferring || server.status ? (
-                        <div className={`flex-1 text-center`}>
-                            <span className={`text-zinc-100 text-xs`}>
-                                {server.isTransferring
-                                    ? 'Transferring'
-                                    : server.status === 'installing'
-                                      ? 'Installing'
-                                      : server.status === 'restoring_backup'
-                                        ? 'Restoring Backup'
-                                        : 'Unavailable'}
-                            </span>
-                        </div>
-                    ) : (
-                        // <Spinner size={'small'} />
-                        // <></>
-                        <div className='text-xs opacity-25'>Sit tight!</div>
-                    )
+                {isSuspended ? (
+                    <div className={`flex-1 text-center`}>
+                        <span className={`text-red-100 text-xs`}>
+                            {server.status === 'suspended' ? 'Suspended' : 'Connection Error'}
+                        </span>
+                    </div>
+                ) : server.isTransferring || server.status ? (
+                    <div className='flex-1 text-center'>
+                        <span className='text-zinc-100 text-xs'>
+                            {(() => {
+                                if (server.isTransferring) return 'Đang chuyển chủ';
+                                switch (server.status) {
+                                    case 'installing':
+                                        return 'Đang cài đặt';
+                                    case 'restoring_backup':
+                                        return 'Đang khôi phục';
+                                    default:
+                                        return 'Unavailable';
+                                }
+                            })()}
+                        </span>
+                    </div>
                 ) : (
+                    <div className='text-xs opacity-25'>Sit tight!</div>
+                )}
+
+                {stats && (
                     <Fragment>
                         <div className={`sm:flex hidden`}>
                             <div className={`flex justify-center gap-2 w-fit`}>

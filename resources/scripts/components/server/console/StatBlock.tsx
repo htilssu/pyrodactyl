@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import React from 'react';
 
 import CopyOnClick from '@/components/elements/CopyOnClick';
 
@@ -11,7 +12,7 @@ interface StatBlockProps {
     className?: string;
 }
 
-export default ({ title, copyOnClick, className, children }: StatBlockProps) => {
+export default function StatBlock({ title, copyOnClick, className, children }: Readonly<StatBlockProps>) {
     return (
         <CopyOnClick text={copyOnClick}>
             <div className={clsx(styles.stat_block, 'bg-[#ffffff09] border-[1px] border-[#ffffff11]', className)}>
@@ -24,4 +25,4 @@ export default ({ title, copyOnClick, className, children }: StatBlockProps) => 
             </div>
         </CopyOnClick>
     );
-};
+}

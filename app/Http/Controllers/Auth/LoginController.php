@@ -3,21 +3,25 @@
 namespace Pterodactyl\Http\Controllers\Auth;
 
 use Carbon\CarbonImmutable;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Pterodactyl\Models\User;
-use Illuminate\Http\JsonResponse;
-use Pterodactyl\Facades\Activity;
-use Illuminate\Contracts\View\View;
 use Illuminate\Contracts\View\Factory as ViewFactory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Log\Logger;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
+use Pterodactyl\Exceptions\DisplayException;
+use Pterodactyl\Facades\Activity;
+use Pterodactyl\Models\User;
+use Throwable as ThrowableAlias;
 
 class LoginController extends AbstractLoginController
 {
     /**
      * LoginController constructor.
      */
-    public function __construct(private ViewFactory $view)
+    public function __construct(private readonly ViewFactory $view)
     {
         parent::__construct();
     }
@@ -35,8 +39,8 @@ class LoginController extends AbstractLoginController
     /**
      * Handle a login request to the application.
      *
-     * @throws \Pterodactyl\Exceptions\DisplayException
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws DisplayException
+     * @throws ValidationException|ThrowableAlias
      */
     public function login(Request $request): JsonResponse
     {
@@ -44,14 +48,13 @@ class LoginController extends AbstractLoginController
             $this->fireLockoutEvent($request);
             $this->sendLockoutResponse($request);
         }
-
         try {
             $username = $request->input('user');
             $user = User::query()->where('username', $username)->orWhere('email', $username)->firstOrFail();
         } catch (ModelNotFoundException) {
             $this->sendFailedLoginResponse($request);
         }
-
+        
         // Ensure that the account is using a valid username and password before trying to
         // continue. Previously this was handled in the 2FA checkpoint, however that has
         // a flaw in which you can discover if an account exists simply by seeing if you

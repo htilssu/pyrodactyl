@@ -34,10 +34,10 @@ const ServerConsoleContainer = () => {
                 {(isNodeUnderMaintenance || isInstalling || isTransferring) && (
                     <Alert type={'warning'} className={'mb-4'}>
                         {isNodeUnderMaintenance
-                            ? 'The node of this server is currently under maintenance and all actions are unavailable.'
+                            ? 'Node server đang được bảo trì.'
                             : isInstalling
-                              ? 'This server is currently running its installation process and most actions are unavailable.'
-                              : 'This server is currently being transferred to another node and all actions are unavailable.'}
+                              ? 'Server đang được cài đặt, một số hành động sẽ không khả thi.'
+                              : 'Server đang được chuyển chủ, một số hành động sẽ không khả thi.'}
                     </Alert>
                 )}
                 <MainPageHeader title={name} titleChildren={<StatusPill />}>

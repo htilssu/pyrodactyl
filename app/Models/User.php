@@ -2,6 +2,11 @@
 
 namespace Pterodactyl\Models;
 
+use Database\Factories\UserFactory;
+use Eloquent;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
+use Illuminate\Support\Carbon;
 use Pterodactyl\Rules\Username;
 use Pterodactyl\Facades\Activity;
 use Illuminate\Support\Collection;
@@ -20,6 +25,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Pterodactyl\Notifications\SendPasswordReset as ResetPasswordNotification;
+use Throwable;
 
 /**
  * Pterodactyl\Models\User.
@@ -37,25 +43,25 @@ use Pterodactyl\Notifications\SendPasswordReset as ResetPasswordNotification;
  * @property bool $root_admin
  * @property bool $use_totp
  * @property string|null $totp_secret
- * @property \Illuminate\Support\Carbon|null $totp_authenticated_at
+ * @property Carbon|null $totp_authenticated_at
  * @property bool $gravatar
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Database\Eloquent\Collection|\Pterodactyl\Models\ApiKey[] $apiKeys
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property \Illuminate\Database\Eloquent\Collection|ApiKey[] $apiKeys
  * @property int|null $api_keys_count
  * @property string $name
- * @property \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property DatabaseNotificationCollection|DatabaseNotification[] $notifications
  * @property int|null $notifications_count
- * @property \Illuminate\Database\Eloquent\Collection|\Pterodactyl\Models\RecoveryToken[] $recoveryTokens
+ * @property \Illuminate\Database\Eloquent\Collection|RecoveryToken[] $recoveryTokens
  * @property int|null $recovery_tokens_count
- * @property \Illuminate\Database\Eloquent\Collection|\Pterodactyl\Models\Server[] $servers
+ * @property \Illuminate\Database\Eloquent\Collection|Server[] $servers
  * @property int|null $servers_count
- * @property \Illuminate\Database\Eloquent\Collection|\Pterodactyl\Models\UserSSHKey[] $sshKeys
+ * @property \Illuminate\Database\Eloquent\Collection|UserSSHKey[] $sshKeys
  * @property int|null $ssh_keys_count
- * @property \Illuminate\Database\Eloquent\Collection|\Pterodactyl\Models\ApiKey[] $tokens
+ * @property \Illuminate\Database\Eloquent\Collection|ApiKey[] $tokens
  * @property int|null $tokens_count
  *
- * @method static \Database\Factories\UserFactory factory(...$parameters)
+ * @method static UserFactory factory(...$parameters)
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
  * @method static Builder|User query()
@@ -77,7 +83,7 @@ use Pterodactyl\Notifications\SendPasswordReset as ResetPasswordNotification;
  * @method static Builder|User whereUsername($value)
  * @method static Builder|User whereUuid($value)
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class User extends Model implements
     AuthenticatableContract,
@@ -90,7 +96,8 @@ class User extends Model implements
     use CanResetPassword;
     use HasAccessTokens;
     use Notifiable;
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+
+    /** @use HasFactory<UserFactory> */
     use HasFactory;
 
     public const USER_LEVEL_USER = 0;
@@ -199,8 +206,9 @@ class User extends Model implements
      * Send the password reset notification.
      *
      * @param string $token
+     * @throws Throwable
      */
-    public function sendPasswordResetNotification($token)
+    public function sendPasswordResetNotification($token): void
     {
         Activity::event('auth:reset-password')
             ->withRequestMetadata()
@@ -213,7 +221,7 @@ class User extends Model implements
     /**
      * Store the username as a lowercase string.
      */
-    public function setUsernameAttribute(string $value)
+    public function setUsernameAttribute(string $value): void
     {
         $this->attributes['username'] = mb_strtolower($value);
     }
@@ -266,7 +274,7 @@ class User extends Model implements
     public function accessibleServers(): Builder
     {
         return Server::query()
-            ->select('servers.id', 'servers.name', 'servers.owner_id') 
+            ->select('servers.id', 'servers.name', 'servers.owner_id')
             ->leftJoin('subusers', 'subusers.server_id', '=', 'servers.id')
             ->where(function (Builder $builder) {
                 $builder->where('servers.owner_id', $this->id)->orWhere('subusers.user_id', $this->id);

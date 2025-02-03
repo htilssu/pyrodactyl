@@ -13,10 +13,10 @@ import {
     DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenu';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
+import Logo from '@/components/elements/HBLogo';
 import MainSidebar from '@/components/elements/MainSidebar';
 import MainWrapper from '@/components/elements/MainWrapper';
 import PermissionRoute from '@/components/elements/PermissionRoute';
-import Logo from '@/components/elements/HBLogo';
 import { NotFound, ServerError } from '@/components/elements/ScreenBlock';
 import CommandMenu from '@/components/elements/commandk/CmdK';
 import HugeIconsClock from '@/components/elements/hugeicons/Clock';
@@ -66,7 +66,7 @@ interface Nest {
     };
 }
 
-export default () => {
+export default function ServerRouter() {
     const params = useParams<'id'>();
     const location = useLocation();
     const [isSidebarVisible, setSidebarVisible] = useState(false);
@@ -260,8 +260,8 @@ export default () => {
                                     'top linear(0,0.006,0.025 2.8%,0.101 6.1%,0.539 18.9%,0.721 25.3%,0.849 31.5%,0.937 38.1%,0.968 41.8%,0.991 45.7%,1.006 50.1%,1.015 55%,1.017 63.9%,1.001) 390ms',
                             }}
                         />
-                        <div className='flex flex-row items-center justify-between h-8'>
-                            <NavLink to={'/'} className='flex shrink-0 h-full w-fit'>
+                        <div className='flex flex-row items-center justify-between h-10'>
+                            <NavLink to={'/'} className='flex shrink-0 h-full w-full'>
                                 <Logo />
                             </NavLink>
                             <DropdownMenu>
@@ -284,9 +284,9 @@ export default () => {
                                     {rootAdmin && (
                                         <DropdownMenuItem onSelect={onSelectManageServer}>
                                             Manage Server
-                                            <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs'>
+                                            <div className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs'>
                                                 Staff
-                                            </span>
+                                            </div>
                                         </DropdownMenuItem>
                                     )}
                                     <DropdownMenuSeparator />
@@ -460,4 +460,4 @@ export default () => {
             )}
         </Fragment>
     );
-};
+}

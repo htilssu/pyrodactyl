@@ -5,7 +5,7 @@ import { ITerminalOptions, Terminal } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
 import clsx from 'clsx';
 import debounce from 'debounce';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
@@ -51,8 +51,8 @@ const terminalProps: ITerminalOptions = {
     theme: theme,
 };
 
-export default () => {
-    const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mcontainer@pterodactyl~ \u001b[0m';
+export default function Console() {
+    const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mcontainer@hbhost~ \u001b[0m';
     const ref = useRef<HTMLDivElement>(null);
     const terminal = useMemo(() => new Terminal({ ...terminalProps, rows: 30 }), []);
     const fitAddon = new FitAddon();
@@ -101,7 +101,7 @@ export default () => {
             const newIndex = Math.max(historyIndex - 1, -1);
 
             setHistoryIndex(newIndex);
-            e.currentTarget.value = history![newIndex] || '';
+            e.currentTarget.value = history![newIndex] ?? '';
         }
 
         const command = e.currentTarget.value;
@@ -216,7 +216,7 @@ export default () => {
                         <input
                             className={clsx('peer', styles.command_input)}
                             type={'text'}
-                            placeholder={'Enter a command'}
+                            placeholder={'Nhập câu lệnh...'}
                             aria-label={'Console command input.'}
                             disabled={!instance || !connected}
                             onKeyDown={handleCommandKeyDown}
@@ -228,4 +228,4 @@ export default () => {
             </div>
         </div>
     );
-};
+}

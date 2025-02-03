@@ -117,7 +117,7 @@ function WebsocketHandler() {
                     <>
                         <Spinner size={'small'} />
                         <p className={`ml-2 text-sm text-red-100`}>
-                            We&apos;re having some trouble connecting to your server, please wait...
+                            Đang có sự cố khi kết nối tới server, xin hãy đợi một chút.
                         </p>
                     </>
                 ) : (

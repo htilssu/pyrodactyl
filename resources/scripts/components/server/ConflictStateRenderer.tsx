@@ -15,9 +15,9 @@ export default () => {
         <div className={'flex items-center justify-center h-full'}>
             <Spinner size={'large'} />
             <div className='flex flex-col ml-4'>
-                <label className='text-neutral-100 text-lg font-bold'>Server is Installing</label>
+                <label className='text-neutral-100 text-lg font-bold'>Server đang được cài đặt</label>
                 <label className='text-neutral-500 text-md font-semibold'>
-                    Your server should be ready soon, for more details visit the home page.
+                    Server của bạn sẽ hoàn thành sớm trong thời gian tới.
                 </label>
             </div>
         </div>
