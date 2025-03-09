@@ -115,7 +115,7 @@
     "scripts": {
         "lint": "eslint ./resources/scripts/**/*.{ts,tsx} --fix",
         "lint:turbo": "turbo lint",
-        "dev": "concurrently \"vite\" \"php artisan serve\"",
+        "dev": "vite --host",
         "build": "vite build",
         "build:turbo": "turbo build",
         "ship": "turbo lint build"
@@ -125,5 +125,6 @@
         "last 2 versions",
         "firefox esr",
         "not dead"
-    ]
+    ],
+    "packageManager": "pnpm@10.6.1+sha512.40ee09af407fa9fbb5fbfb8e1cb40fbb74c0af0c3e10e9224d7b53c7658528615b2c92450e74cfad91e3a2dcafe3ce4050d80bda71d757756d2ce2b66213e9a3"
 }

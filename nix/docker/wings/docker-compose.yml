@@ -15,5 +15,3 @@ services:
       - "./log:/var/log/pterodactyl"
       - "./tmp:/tmp/pterodactyl"
       - "./:/etc/pterodactyl/"
-
-

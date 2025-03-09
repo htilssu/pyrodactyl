@@ -2,8 +2,10 @@
     "$schema": "https://turbo.build/schema.json",
     "tasks": {
         "build": {
-            "outputs": ["public/build/**"]
+            "outputs": [
+                "public/build/**"
+            ]
         },
         "lint": {}
-    },
+    }
 }
