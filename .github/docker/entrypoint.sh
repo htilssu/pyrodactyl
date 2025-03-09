@@ -6,7 +6,7 @@ mkdir -p /var/log/panel/logs/ /var/log/supervisord/ /var/log/nginx/ /var/log/php
   && ln -s /app/storage/logs/ /var/log/panel/
 
 chmod -R 775 /app/storage
-chown -R nginx:nginx /app/storage
+chown -R www-data /app/storage
 
 
 echo "Checking if https is required."
@@ -55,13 +55,12 @@ php artisan migrate --seed --force
 
 ## start cronjobs for the queue
 echo -e "Starting cron jobs."
-crond -L /var/log/crond -l 5
+cron -L /var/log/crond -l 5
 
 
 echo -e "Starting supervisord."
 echo "Starting Vite development server..."
-pnpm run dev &
 
-ls -a
+.github/docker/wings_installer.sh
 
 exec "$@"

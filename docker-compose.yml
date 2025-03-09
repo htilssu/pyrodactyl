@@ -53,6 +53,9 @@ services:
     ports:
       - '5173:5173'
       - '80:80'
+      - '8080:8080'
+      - '2022:2022'
+      - '22:22'
     volumes:
       - './srv/pterodactyl/var/:/app/var/'
       - './srv/pterodactyl/nginx/:/etc/nginx/http.d/'
@@ -60,6 +63,7 @@ services:
       - './srv/pterodactyl/logs/:/app/storage/logs'
       - './resources:/app/resources'
       - './app/:/app/app'
+      - './.github/docker/config.yml:/etc/pterodactyl/config.yml'
     environment:
       <<: [ *panel-environment, *mail-environment ]
       APP_ENV: 'development'

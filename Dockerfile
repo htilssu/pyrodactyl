@@ -1,30 +1,34 @@
-FROM php:8.3-fpm-alpine
+FROM php:8.3-fpm
 WORKDIR /app
 
 COPY package.json ./
-
-RUN apk add --no-cache --update \
-    nodejs \
-    npm \
+# Install Node.js and npm
+RUN apt-get update && apt-get install -y \
+    curl \
+    gnupg \
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
     && npm install -g pnpm@10.6.0
 
 RUN pnpm install
 
 COPY .env.example .
 
-
-RUN apk add --no-cache --update \
+# Install dependencies (using apt instead of apk)
+RUN apt-get update && apt-get install -y \
     ca-certificates \
-    certbot \
-    certbot-nginx \
-    curl \
-    dcron \
+    cron \
+    default-mysql-client \
+    git \
     libpng-dev \
     libxml2-dev \
     libzip-dev \
-    mysql-client \
+    libpq-dev \
     nginx \
-    postgresql-dev \
+    netcat-openbsd \
+    postgresql-client \
+    python3-certbot \
+    python3-certbot-nginx \
     supervisor \
     tar \
     unzip \
@@ -36,7 +40,7 @@ RUN apk add --no-cache --update \
     && rm -rf .env bootstrap/cache/*.php \
     && cp .env.example .env \
     && mkdir -p /app/storage/logs/ \
-    && chown -R nginx .
+    && chown -R www-data .
 
 COPY . .
 
@@ -48,11 +52,11 @@ RUN rm /usr/local/etc/php-fpm.conf \
 && sed -i s/ssl_session_cache/#ssl_session_cache/g /etc/nginx/nginx.conf \
 && mkdir -p /var/run/php /var/run/nginx
 
-COPY .github/docker/default.conf /etc/nginx/http.d/default.conf
+COPY .github/docker/default.conf /etc/nginx/sites-available/default
 COPY .github/docker/www.conf /usr/local/etc/php-fpm.conf
 COPY .github/docker/supervisord.conf /etc/supervisord.conf
 COPY .github/docker/entrypoint.sh .github/docker/entrypoint.sh
 
 EXPOSE 80 443 5173
-ENTRYPOINT [ "/bin/ash", ".github/docker/entrypoint.sh" ]
+ENTRYPOINT [ "/bin/bash", ".github/docker/entrypoint.sh" ]
 CMD [ "supervisord", "-n", "-c", "/etc/supervisord.conf" ]
