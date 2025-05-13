@@ -109,7 +109,7 @@ export default () => {
             setHistory((prevHistory) => [command, ...prevHistory!].slice(0, 32));
             setHistoryIndex(-1);
 
-            instance && instance.send('send command', command);
+            if (instance) instance.send('send command', command);
             e.currentTarget.value = '';
         }
     };
@@ -206,7 +206,11 @@ export default () => {
         >
             <div className={clsx(styles.terminal, 'relative')}>
                 <SpinnerOverlay visible={!connected} size={'large'} />
-                <div className={clsx(styles.container, styles.overflows_container, { 'rounded-b': !canSendCommands })}>
+                <div
+                    className={clsx(styles.terminalContainer, styles.overflows_container, {
+                        'rounded-b': !canSendCommands,
+                    })}
+                >
                     <div className={'h-full'}>
                         <div id={styles.terminal} ref={ref} />
                     </div>
